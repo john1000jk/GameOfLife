@@ -11,7 +11,10 @@ public class SpotImpl extends JPanel implements Spot {
 	private int spotX;
 	private int spotY;
 	private Board board;
+	private boolean isSet;
 	private boolean isOn;
+	private boolean shouldSet;
+	private boolean shouldClear;
 	private Color spotColor;
 	
 	public SpotImpl(int x, int y, Board b, Color c) {
@@ -19,6 +22,7 @@ public class SpotImpl extends JPanel implements Spot {
 		spotY = y;
 		board = b;
 		spotColor = c;
+		isSet = true;
 	}
 	
 
@@ -41,10 +45,31 @@ public class SpotImpl extends JPanel implements Spot {
 	public boolean isOn() {
 		return isOn;
 	}
+	
+	public boolean isSet() {
+		return isSet;
+	}
+	
+	public boolean getShouldSet() {
+		return shouldSet;
+	}
+	
+	public void setShouldSet(boolean b) {
+		shouldSet = b;
+	}
+	
+	public boolean getShouldClear() {
+		return shouldClear;
+	}
+	
+	public void setShouldClear(boolean b) {
+		shouldClear = b;
+	}
 
 	@Override
 	public void setSpot() {
 		isOn = false;
+		isSet = true;
 		advance();
 	}
 
@@ -52,6 +77,7 @@ public class SpotImpl extends JPanel implements Spot {
 	@Override
 	public void clearSpot() {
 		isOn = true;
+		isSet = false;
 		advance();
 	}
 
@@ -75,6 +101,8 @@ public class SpotImpl extends JPanel implements Spot {
 		if (!isOn()) {
 			g2d.setColor(getSpotColor());
 			g2d.fillRect(0, 0, this.getWidth()-1, this.getHeight()-1);
+		} else {
+			g2d.fillRect(0, 0, 0, 0);
 		}
 	}
 

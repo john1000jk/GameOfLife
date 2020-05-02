@@ -14,7 +14,7 @@ public class BoardImpl extends JPanel implements Board {
 	private Spot[][] spots;
 	private Spot[][] spotsWrap;
 	
-	public BoardImpl(int x, int y) {
+	public BoardImpl(int y, int x) {
 		if (x < 1 || y < 1 || x > 500 || y > 500) {
 			throw new IllegalArgumentException("Illegal spot board geometry");
 		}
@@ -24,23 +24,29 @@ public class BoardImpl extends JPanel implements Board {
 		for (int i = 0; i < x; i++) {
 			for(int j = 0; j < y; j++) {
 				spots[i][j] = new SpotImpl(i, j, this, Color.BLACK);
-				if (Math.random() < .8) {
-					spots[i][j].toggleSpot();
-				}
+				spots[i][j].toggleSpot();
 				spotsWrap[i+1][j+1] = spots[i][j];
 				Dimension preferredSize = new Dimension(500/x, 500/y);
 				((SpotImpl) spots[i][j]).setPreferredSize(preferredSize);
 				add((SpotImpl) spots[i][j]);
 			}
 		}
-		for (int i = 0; i < x; i++) {
-			spotsWrap[i][0] = spots[i][y-1];
-			spotsWrap[i][y+1] = spots[i][0];
+		spots[1][1].toggleSpot();
+		spots[1][2].toggleSpot();
+		spots[2][1].toggleSpot();
+		spots[2][2].toggleSpot();
+		for (int i = 1; i < x + 1; i++) {
+			spotsWrap[i][0] = spots[i-1][y-1];
+			spotsWrap[i][y+1] = spots[i-1][0];
 		}
-		for (int j = 0; j < y; j++) {
-			spotsWrap[0][j] = spots[x-1][j];
-			spotsWrap[x+1][j] = spots[0][j];
+		for (int j = 1; j < y + 1; j++) {
+			spotsWrap[0][j] = spots[x-1][j-1];
+			spotsWrap[x+1][j] = spots[0][j -1];
 		}
+		spotsWrap[0][0] = spots[x-1][y-1];
+		spotsWrap[x+1][0] = spots[0][y-1];
+		spotsWrap[0][y+1] = spots[x-1][0];
+		spotsWrap[x+1][y+1] = spots[0][0];
 	}
 	
 
@@ -55,6 +61,9 @@ public class BoardImpl extends JPanel implements Board {
 	}
 	
 	public Spot getSpotAt(int x, int y) {
+		if (x < 0 || x >= getSpotWidth() || y < 0 || y >= getSpotHeight()) {
+			throw new IllegalArgumentException("Illegal spot coordinates");
+		}
 		return spots[x][y];
 	}
 	
@@ -66,8 +75,10 @@ public class BoardImpl extends JPanel implements Board {
 		int numNeighbors = 0;
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
-				if (spotsWrap[s.getSpotX() + 1 -i][s.getSpotY() + 1 -j].isOn()) {
-					numNeighbors += 1;
+				if (spotsWrap[s.getSpotX() + 1 + i][s.getSpotY() + 1 + j].isSet()) {
+					if (!(i == 0 && j == 0)) {
+						numNeighbors += 1;
+					}
 				}
 			}
 		}

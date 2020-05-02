@@ -7,6 +7,7 @@ public class GameOfLifeController implements GameOfLifeViewObserver {
 	public GameOfLifeController(GameOfLifeModel m, GameOfLifeView v) {
 		model = m;
 		view = v;
+		view.addObserver(this);
 	}
 	
 	@Override
