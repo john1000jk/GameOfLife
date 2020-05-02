@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class BoardImpl extends JPanel implements Board {
 
@@ -22,7 +23,10 @@ public class BoardImpl extends JPanel implements Board {
 		setLayout(new GridLayout(x, y));
 		for (int i = 0; i < x; i++) {
 			for(int j = 0; j < y; j++) {
-				spots[i][j] = new SpotImpl(i, j, this, Color.WHITE);
+				spots[i][j] = new SpotImpl(i, j, this, Color.BLACK);
+				if (Math.random() < .8) {
+					spots[i][j].toggleSpot();
+				}
 				spotsWrap[i+1][j+1] = spots[i][j];
 				Dimension preferredSize = new Dimension(500/x, 500/y);
 				((SpotImpl) spots[i][j]).setPreferredSize(preferredSize);

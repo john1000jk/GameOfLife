@@ -1,6 +1,9 @@
 package conway;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -60,6 +63,19 @@ public class SpotImpl extends JPanel implements Spot {
 	@Override
 	public Color getSpotColor() {
 		return spotColor;
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		// Super class paintComponent will take care of 
+		// painting the background.
+		super.paintComponent(g);
+
+		Graphics2D g2d = (Graphics2D) g.create();
+		if (!isOn()) {
+			g2d.setColor(getSpotColor());
+			g2d.fillRect(0, 0, this.getWidth()-1, this.getHeight()-1);
+		}
 	}
 
 	private void advance() {

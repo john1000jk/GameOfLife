@@ -10,7 +10,7 @@ public class GameOfLife {
 		/* Create top level window. */
 
 		JFrame main_frame = new JFrame();
-		main_frame.setTitle("John Kirollos Pandemic Simulator");
+		main_frame.setTitle("John Kirollos Game of Life Simulator");
 		main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		/* Create panel for content. Uses BorderLayout. */
@@ -18,11 +18,11 @@ public class GameOfLife {
 		top_panel.setLayout(new BorderLayout());
 		main_frame.setContentPane(top_panel);
 
-//		PandemicModel model = new PandemicModel(100.0, 100, 0.01);
-//		PandemicView view = new PandemicView(model);
-//		PandemicController controller = new PandemicController(model, view);
-
-//		top_panel.add(view, BorderLayout.CENTER);
+		GameOfLifeModel model = new GameOfLifeModel(20, 20);
+		GameOfLifeView view = new GameOfLifeView(model);
+		GameOfLifeController controller = new GameOfLifeController(model, view);
+		
+		top_panel.add(view, BorderLayout.CENTER);
 
 		/* Pack main frame and make visible. */
 

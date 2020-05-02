@@ -1,5 +1,6 @@
 package conway;
 
-public class GameOfLifeViewObserver {
-
+public interface GameOfLifeViewObserver {
+	
+	public void handleEvent(GameOfLifeViewEvent gve);
 }
