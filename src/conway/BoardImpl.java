@@ -15,18 +15,20 @@ public class BoardImpl extends JPanel implements Board {
 
 	private Spot[][] spots;
 	private Spot[][] spotsWrap;
+	private double density = 0;
 	
-	public BoardImpl(int y, int x) {
+	public BoardImpl(int y, int x, double d) {
 		if (x < 1 || y < 1 || x > 500 || y > 500) {
 			throw new IllegalArgumentException("Illegal spot board geometry");
 		}
+		density = d;
 		spots = new Spot[x][y];
 		spotsWrap = new Spot[x+2][y+2];
 		setLayout(new GridLayout(x, y));
 		for (int i = 0; i < x; i++) {
 			for(int j = 0; j < y; j++) {
 				spots[i][j] = new SpotImpl(i, j, this, Color.BLACK);
-				if (Math.random() < .8) {
+				if (!(Math.random() < density/100)) {
 					spots[i][j].toggleSpot();
 				}
 				spotsWrap[i+1][j+1] = spots[i][j];
@@ -69,6 +71,31 @@ public class BoardImpl extends JPanel implements Board {
 	
 	public Iterator<Spot> iterator() {
 		return new BoardIterator(this);
+	}
+	
+	public double getDensity() {
+		return density;
+	}
+	
+	public void setDensity(double d) {
+		density = d;
+	}
+	
+	public void addSpotListener(SpotListener a) {
+		for (int i = 0; i < getSpotWidth(); i++) {
+			for (int j = 0; j < getSpotHeight(); j++) {
+				spots[i][j].addSpotListener(a);
+			}
+		}
+	}
+	
+	@Override
+	public void removeSpotListener(SpotListener a) {
+		for (int i = 0; i < getSpotWidth(); i++) {
+			for (int j = 0; j < getSpotHeight(); j++) {
+				spots[i][j].removeSpotListener(a);
+			}
+		}
 	}
 	
 	public int getNumNeighbors(Spot s) {

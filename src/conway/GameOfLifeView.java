@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class GameOfLifeView extends JPanel implements ActionListener, GameOfLifeModelObserver {
+public class GameOfLifeView extends JPanel implements ActionListener, SpotListener, GameOfLifeModelObserver {
 	private List<GameOfLifeViewObserver> observers;
 	private Board board;
 	private GameOfLifeModel model;
@@ -31,6 +31,8 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 	private JTextField width = new JTextField(20 + "");
 	private JLabel heightL = new JLabel("Height: ");
 	private JTextField height = new JTextField(20 + "");
+	private JLabel densityL = new JLabel("Density: ");
+	private JTextField density = new JTextField(20 + "");
 	private JLabel simSpeedL = new JLabel("Sim Speed: ");
 	private JSlider simSpeed = new JSlider(1, 100);
 	private ActionListener enterListener = new CoolActionListener();
@@ -56,7 +58,7 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 40;
-		c.ipadx = 20;
+		c.ipadx = 5;
 		topRow.add(iterationsL, c);
 		topRow.add(iterations, c);
 		topRow.add(start, c);
@@ -65,6 +67,8 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 		topRow.add(width, c);
 		topRow.add(heightL, c);
 		topRow.add(height, c);
+		topRow.add(densityL, c);
+		topRow.add(density, c);
 		topRow.add(reset, c);
 		
 		boardPanel.setLayout(new GridLayout());
@@ -92,8 +96,10 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 		
 		width.addActionListener(enterListener);
 		height.addActionListener(enterListener);
+		density.addActionListener(enterListener);
 		start.addActionListener(this);
 		reset.addActionListener(enterListener);
+		board.addSpotListener(this);
 		
 		simSpeed.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -101,6 +107,7 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 				simSpeedL.setText("Sim Speed (steps/sec): " + simSpeed.getValue());
 			}
 		});
+		
 		
 		resetS.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -165,6 +172,7 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 			 	} 
 		    	int a;
 		    	int b;
+		    	double c;
 		    	try {
 		    		a = Integer.parseInt(width.getText());
 		    	} catch (Exception f) {
@@ -175,13 +183,23 @@ public class GameOfLifeView extends JPanel implements ActionListener, GameOfLife
 		    	} catch (IllegalArgumentException f) {
 		    		b = 20;
 		    	}
+		    	try {
+		    		c = Double.parseDouble(density.getText());
+		    	} catch (IllegalArgumentException f) {
+		    		c = 20;
+		    	}
 		    	boardPanel.removeAll();
-		    	board = new BoardImpl(a, b);
+		    	board = new BoardImpl(a, b, c);
+		    	board.addSpotListener(that);
 				boardPanel.add((BoardImpl) board, BorderLayout.CENTER);
 		    	for (GameOfLifeViewObserver v: observers) {
 		    		v.handleEvent(new GVEReset(board));
 		    	}
 		    }
+	}
+	@Override
+	public void spotClicked(Spot s) {
+		s.toggleSpot();
 	}
 
 }

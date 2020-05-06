@@ -20,6 +20,9 @@ public interface Spot {
 			clearSpot();
 		}
 	}
+	
+	void addSpotListener(SpotListener a);
+	void removeSpotListener(SpotListener a);
 	boolean getShouldSet();
 	void setShouldSet(boolean b);
 	boolean getShouldClear();

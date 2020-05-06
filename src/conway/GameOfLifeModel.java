@@ -6,13 +6,12 @@ import java.util.List;
 public class GameOfLifeModel {
 	private Board board;
 	private int simSpeed = 1;
-	private boolean reset = false;
 //	private int reviveCount;
 //	private int stayAliveCount;
 	private List<GameOfLifeModelObserver> observers;
 	
 	public GameOfLifeModel(int x, int y) {
-		board = new BoardImpl(x, y);
+		board = new BoardImpl(x, y, 20);
 		observers = new ArrayList<GameOfLifeModelObserver>();
 	}
 	
@@ -55,14 +54,6 @@ public class GameOfLifeModel {
 	
 	public int getSimSpeed() {
 		return simSpeed;
-	}
-	
-	public boolean getReset() {
-		return reset;
-	}
-	
-	public void setReset(boolean a) {
-		reset = a;
 	}
 	
 	public void setSimSpeed(int s) {

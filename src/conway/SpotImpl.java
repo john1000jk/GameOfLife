@@ -4,10 +4,14 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
-public class SpotImpl extends JPanel implements Spot {
+public class SpotImpl extends JPanel implements Spot, MouseListener {
 	private int spotX;
 	private int spotY;
 	private Board board;
@@ -16,6 +20,7 @@ public class SpotImpl extends JPanel implements Spot {
 	private boolean shouldSet;
 	private boolean shouldClear;
 	private Color spotColor;
+	private List<SpotListener> spotListeners;
 	
 	public SpotImpl(int x, int y, Board b, Color c) {
 		spotX = x;
@@ -23,6 +28,8 @@ public class SpotImpl extends JPanel implements Spot {
 		board = b;
 		spotColor = c;
 		isSet = true;
+		spotListeners = new ArrayList<SpotListener>();
+		addMouseListener(this);
 	}
 	
 
@@ -64,6 +71,14 @@ public class SpotImpl extends JPanel implements Spot {
 	
 	public void setShouldClear(boolean b) {
 		shouldClear = b;
+	}
+	
+	public void addSpotListener(SpotListener s) {
+		spotListeners.add(s);
+	}
+	
+	public void removeSpotListener(SpotListener s) {
+		spotListeners.remove(s);
 	}
 
 	@Override
@@ -108,5 +123,39 @@ public class SpotImpl extends JPanel implements Spot {
 
 	private void advance() {
 		repaint();
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		for (SpotListener s : spotListeners) {
+			s.spotClicked(this);
+		}		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
