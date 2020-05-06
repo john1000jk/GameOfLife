@@ -32,7 +32,7 @@ public class GameOfLifeController implements GameOfLifeViewObserver {
 			break;
 		case RESET:
 			GVEReset reset = (GVEReset) gve;
-			model.reset(reset.getHeight(), reset.getWidth());
+			model.reset(reset.getBoard());
 			break;
 		}
 	}

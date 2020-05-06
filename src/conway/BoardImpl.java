@@ -2,6 +2,8 @@ package conway;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.Iterator;
@@ -24,17 +26,15 @@ public class BoardImpl extends JPanel implements Board {
 		for (int i = 0; i < x; i++) {
 			for(int j = 0; j < y; j++) {
 				spots[i][j] = new SpotImpl(i, j, this, Color.BLACK);
-				spots[i][j].toggleSpot();
+				if (Math.random() < .8) {
+					spots[i][j].toggleSpot();
+				}
 				spotsWrap[i+1][j+1] = spots[i][j];
 				Dimension preferredSize = new Dimension(500/x, 500/y);
 				((SpotImpl) spots[i][j]).setPreferredSize(preferredSize);
 				add((SpotImpl) spots[i][j]);
 			}
 		}
-		spots[1][1].toggleSpot();
-		spots[1][2].toggleSpot();
-		spots[2][1].toggleSpot();
-		spots[2][2].toggleSpot();
 		for (int i = 1; i < x + 1; i++) {
 			spotsWrap[i][0] = spots[i-1][y-1];
 			spotsWrap[i][y+1] = spots[i-1][0];

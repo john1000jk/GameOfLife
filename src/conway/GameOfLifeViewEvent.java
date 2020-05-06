@@ -21,21 +21,16 @@ class GVEStep extends GameOfLifeViewEvent {
 }
 
 class GVEReset extends GameOfLifeViewEvent {
-	private int width;
-	private int height;
 	
-	protected GVEReset(int w, int h) {
+	private Board b;
+	
+	protected GVEReset(Board b) {
 		super(GVEType.RESET);
-		width = w;
-		height = h;
+		
+		this.b = b;
 	}
 	
-	public int getWidth() {
-		return width;
+	public Board getBoard() {
+		return b;
 	}
-	
-	public int getHeight() {
-		return height;
-	}
-	
 }
