@@ -6,13 +6,15 @@ import java.util.List;
 public class GameOfLifeModel {
 	private Board board;
 	private int simSpeed = 1;
-//	private int reviveCount;
-//	private int stayAliveCount;
+	private List<Integer> stayAliveCount;
+	private List<Integer> reviveCount;
 	private List<GameOfLifeModelObserver> observers;
 	
 	public GameOfLifeModel(int x, int y) {
 		board = new BoardImpl(x, y, 20);
 		observers = new ArrayList<GameOfLifeModelObserver>();
+		stayAliveCount = new ArrayList<Integer>();
+		reviveCount = new ArrayList<Integer>();
 	}
 	
 	public Board getBoard() {
@@ -27,13 +29,11 @@ public class GameOfLifeModel {
 	public synchronized void advance() {
 		for (int i = 0; i < board.getSpotWidth(); i++) {
 			for (int j = 0; j < board.getSpotHeight(); j++) {
-				if (board.getNumNeighbors(board.getSpotAt(i, j)) > 3 || 
-						board.getNumNeighbors(board.getSpotAt(i, j)) < 2) {
-					board.getSpotAt(i, j).setShouldClear(true);
-				} else if (board.getNumNeighbors(board.getSpotAt(i, j)) == 2 && 
+				if (stayAliveCount.contains(board.getNumNeighbors(board.getSpotAt(i, j))) && 
 						board.getSpotAt(i, j).isSet()) {
 					board.getSpotAt(i, j).setShouldSet(true);
-				} else if (board.getNumNeighbors(board.getSpotAt(i, j)) == 3) {
+				} else if (reviveCount.contains(board.getNumNeighbors(board.getSpotAt(i, j))) &&
+						!board.getSpotAt(i, j).isSet()) {
 					board.getSpotAt(i, j).setShouldSet(true);
 				}
 			}
@@ -51,6 +51,23 @@ public class GameOfLifeModel {
 		
 		notifyObservers(GameOfLifeModelEvent.ADVANCED_EVENT);
 	}
+	
+	public void addReviveCount(int a) {
+		reviveCount.add(a);
+	}
+	
+	public void removeReviveCount(int a) {
+		reviveCount.remove(Integer.valueOf(a));
+	}
+	
+	public void addStayAliveCount(int a) {
+		stayAliveCount.add(a);
+	}
+	
+	public void removeStayAliveCount(int a) {
+		stayAliveCount.remove(Integer.valueOf(a));
+	}
+
 	
 	public int getSimSpeed() {
 		return simSpeed;

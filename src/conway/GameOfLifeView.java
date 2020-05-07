@@ -1,16 +1,21 @@
 package conway;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -45,31 +50,78 @@ public class GameOfLifeView extends JPanel implements ActionListener, SpotListen
 		model.addObserver(this);
 		observers = new ArrayList<GameOfLifeViewObserver>();
 		
-		setLayout(new BorderLayout());
-		
-		JPanel topRow = new JPanel();
+		setLayout(new BorderLayout());		
+		JPanel stayAliveRow = new JPanel();
+		JPanel reviveRow = new JPanel();
+		JPanel row1 = new JPanel();
+		JPanel row2 = new JPanel();
+		JPanel row3 = new JPanel();
 		JPanel sliderPanel = new JPanel();
 		JPanel sliderNamePanel = new JPanel();
 		JPanel superSliderPanel = new JPanel();
 		JPanel totalDisplayPanel = new JPanel();
 		
-
-		topRow.setLayout(new GridBagLayout());
+		for (int i = 0; i < 9; i++) {
+			stayAliveRow.add(new JCheckBox(i + ""));
+			reviveRow.add(new JCheckBox(i + ""));
+		}
+		
+		for (Component c: stayAliveRow.getComponents()) {
+			JCheckBox check = (JCheckBox) c;
+			check.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (check.isSelected()) {
+						model.addStayAliveCount(Integer.parseInt(check.getText()));
+					} else {
+						model.removeStayAliveCount(Integer.parseInt(check.getText()));
+					}
+				}
+			});
+		}
+		
+		for (Component c: reviveRow.getComponents()) {
+			JCheckBox check = (JCheckBox) c;
+			check.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (check.isSelected()) {
+						model.addReviveCount(Integer.parseInt(check.getText()));
+					} else {
+						model.removeReviveCount(Integer.parseInt(check.getText()));
+					}
+				}
+			});
+		}
+		
+		JLabel survive = new JLabel("Survive Rules:");
+		JLabel revive = new JLabel("Revive Rules: ");
+		
+		stayAliveRow.setLayout(new GridBagLayout());
+		reviveRow.setLayout(new GridBagLayout());
+		
+		row1.setLayout(new BorderLayout());
+		row1.add(survive, BorderLayout.WEST);
+		row1.add(stayAliveRow, BorderLayout.CENTER);
+		
+		row2.setLayout(new BorderLayout());
+		row2.add(revive, BorderLayout.WEST);
+		row2.add(reviveRow, BorderLayout.CENTER);
+		
+		row3.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 40;
 		c.ipadx = 5;
-		topRow.add(iterationsL, c);
-		topRow.add(iterations, c);
-		topRow.add(start, c);
-		topRow.add(new JLabel(), c);
-		topRow.add(widthL, c);
-		topRow.add(width, c);
-		topRow.add(heightL, c);
-		topRow.add(height, c);
-		topRow.add(densityL, c);
-		topRow.add(density, c);
-		topRow.add(reset, c);
+		row3.add(iterationsL, c);
+		row3.add(iterations, c);
+		row3.add(start, c);
+		row3.add(new JLabel(), c);
+		row3.add(widthL, c);
+		row3.add(width, c);
+		row3.add(heightL, c);
+		row3.add(height, c);
+		row3.add(densityL, c);
+		row3.add(density, c);
+		row3.add(reset, c);
 		
 		boardPanel.setLayout(new GridLayout());
 		boardPanel.add((BoardImpl) board, BorderLayout.CENTER);
@@ -89,9 +141,15 @@ public class GameOfLifeView extends JPanel implements ActionListener, SpotListen
 		totalDisplayPanel.setLayout(new GridBagLayout());
 		c.gridx = 0;
 		c.gridy = 0;
-		totalDisplayPanel.add(topRow, c);
+		totalDisplayPanel.add(row1, c);
 		c.gridx = 0;
 		c.gridy = 1;
+		totalDisplayPanel.add(row2, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		totalDisplayPanel.add(row3, c);
+		c.gridx = 0;
+		c.gridy = 3;
 		totalDisplayPanel.add(superSliderPanel, c);
 		
 		width.addActionListener(enterListener);
@@ -115,6 +173,21 @@ public class GameOfLifeView extends JPanel implements ActionListener, SpotListen
 		});
 		
 		add(totalDisplayPanel, BorderLayout.SOUTH);
+		
+		for (Component f: stayAliveRow.getComponents()) {
+			JCheckBox check = (JCheckBox) f;
+			if (check.getText().equals("2") || check.getText().equals("3")) {
+				check.doClick();
+			}
+		}
+		
+		for (Component f: reviveRow.getComponents()) {
+			JCheckBox check = (JCheckBox) f;
+			if (check.getText().equals("3")) {
+				check.doClick();
+			}
+		}
+
 	}
 	
 	public boolean isOn() {
