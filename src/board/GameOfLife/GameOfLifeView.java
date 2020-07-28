@@ -1,8 +1,7 @@
-package conway;
+package board.GameOfLife;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -23,6 +22,11 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import board.Board;
+import board.BoardImpl;
+import board.Spot;
+import board.SpotListener;
+
 public class GameOfLifeView extends JPanel implements ActionListener, SpotListener, GameOfLifeModelObserver {
 	private List<GameOfLifeViewObserver> observers;
 	private Board board;
@@ -38,11 +42,9 @@ public class GameOfLifeView extends JPanel implements ActionListener, SpotListen
 	private JTextField height = new JTextField(20 + "");
 	private JLabel densityL = new JLabel("Density: ");
 	private JTextField density = new JTextField(20 + "");
-	private JLabel simSpeedL = new JLabel("Sim Speed: ");
+	private JLabel simSpeedL = new JLabel("Sim Speed (steps/sec): 50");
 	private JSlider simSpeed = new JSlider(1, 100);
 	private ActionListener enterListener = new CoolActionListener();
-	private JSlider resetS = new JSlider(1, 2);
-
 	
 	public GameOfLifeView(GameOfLifeModel m) {
 		model = m;
@@ -163,12 +165,6 @@ public class GameOfLifeView extends JPanel implements ActionListener, SpotListen
 			public void stateChanged(ChangeEvent e) {
 				model.setSimSpeed(simSpeed.getValue());
 				simSpeedL.setText("Sim Speed (steps/sec): " + simSpeed.getValue());
-			}
-		});
-		
-		
-		resetS.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
 			}
 		});
 		

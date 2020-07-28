@@ -1,4 +1,4 @@
-package conway;
+package board.GameOfLife;
 
 abstract public class GameOfLifeModelEvent {
 	public enum GMEType {ADVANCED, RESET};

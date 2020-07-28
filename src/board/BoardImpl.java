@@ -1,4 +1,4 @@
-package conway;
+package board;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,7 +6,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -87,6 +90,18 @@ public class BoardImpl extends JPanel implements Board {
 				spots[i][j].addSpotListener(a);
 			}
 		}
+	}
+	
+	public List<Spot> getUnoccupiedSpots() {
+		List<Spot> unoccupied = new ArrayList<Spot>();
+		for (int i = 0; i < spots.length; i++) {
+			for (int j = 0; j < spots[0].length; j++) {
+				if (!spots[i][j].isApple() && !spots[i][j].isSet()) {
+					unoccupied.add(spots[i][j]);
+				}
+			}
+		}
+		return unoccupied;
 	}
 	
 	@Override

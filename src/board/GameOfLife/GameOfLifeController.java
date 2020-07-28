@@ -1,4 +1,4 @@
-package conway;
+package board.GameOfLife;
 
 public class GameOfLifeController implements GameOfLifeViewObserver {
 

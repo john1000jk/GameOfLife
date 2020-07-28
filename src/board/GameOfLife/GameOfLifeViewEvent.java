@@ -1,4 +1,6 @@
-package conway;
+package board.GameOfLife;
+
+import board.Board;
 
 public class GameOfLifeViewEvent {
 	public enum GVEType {STEP, RESET};

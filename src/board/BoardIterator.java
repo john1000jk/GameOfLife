@@ -1,4 +1,4 @@
-package conway;
+package board;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

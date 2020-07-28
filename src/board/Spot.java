@@ -1,6 +1,7 @@
-package conway;
+package board;
 
 import java.awt.Color;
+import java.awt.event.KeyListener;
 
 
 public interface Spot {
@@ -10,7 +11,6 @@ public interface Spot {
 	Board getBoard();
 	
 	boolean isSet();
-	boolean isOn();
 	void setSpot();
 	void clearSpot();
 	default void toggleSpot() {
@@ -24,6 +24,8 @@ public interface Spot {
 	void addSpotListener(SpotListener a);
 	void removeSpotListener(SpotListener a);
 	boolean getShouldSet();
+	boolean isApple();
+	void morphApple();
 	void setShouldSet(boolean b);
 	boolean getShouldClear();
 	void setShouldClear(boolean b);

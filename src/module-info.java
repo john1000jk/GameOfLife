@@ -1,5 +1,5 @@
 module gameOfLife {
-	exports conway;
+	exports board;
 	
 	requires java.desktop;
 }

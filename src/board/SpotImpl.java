@@ -1,14 +1,19 @@
-package conway;
+package board;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class SpotImpl extends JPanel implements Spot, MouseListener {
@@ -16,18 +21,20 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 	private int spotY;
 	private Board board;
 	private boolean isSet;
-	private boolean isOn;
 	private boolean shouldSet;
 	private boolean shouldClear;
+	private boolean isApple;
 	private Color spotColor;
 	private List<SpotListener> spotListeners;
 	
 	public SpotImpl(int x, int y, Board b, Color c) {
+		setFocusable(true);
 		spotX = x;
 		spotY = y;
 		board = b;
 		spotColor = c;
 		isSet = true;
+		isApple = false;
 		spotListeners = new ArrayList<SpotListener>();
 		addMouseListener(this);
 	}
@@ -46,11 +53,6 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 	@Override
 	public Board getBoard() {
 		return board;
-	}
-
-	@Override
-	public boolean isOn() {
-		return isOn;
 	}
 	
 	public boolean isSet() {
@@ -83,7 +85,6 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 
 	@Override
 	public void setSpot() {
-		isOn = false;
 		isSet = true;
 		advance();
 	}
@@ -91,7 +92,6 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 
 	@Override
 	public void clearSpot() {
-		isOn = true;
 		isSet = false;
 		advance();
 	}
@@ -100,7 +100,7 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 	public void setSpotColor(Color c) {
 		spotColor = c;
 	}
-
+	
 	@Override
 	public Color getSpotColor() {
 		return spotColor;
@@ -113,9 +113,11 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		if (!isOn()) {
+		if (isSet() && !(isApple)) {
 			g2d.setColor(getSpotColor());
 			g2d.fillRect(0, 0, this.getWidth()-1, this.getHeight()-1);
+		} else if (isApple) {
+			g.drawOval(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 		} else {
 			g2d.fillRect(0, 0, 0, 0);
 		}
@@ -124,7 +126,15 @@ public class SpotImpl extends JPanel implements Spot, MouseListener {
 	private void advance() {
 		repaint();
 	}
-
+	
+	public boolean isApple() {
+		return isApple;
+	}
+		
+	public void morphApple() {
+		isApple = !isApple;
+		repaint();
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

@@ -1,7 +1,10 @@
-package conway;
+package board.GameOfLife;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import board.Board;
+import board.BoardImpl;
 
 public class GameOfLifeModel {
 	private Board board;
